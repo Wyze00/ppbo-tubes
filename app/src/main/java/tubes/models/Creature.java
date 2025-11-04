@@ -11,11 +11,11 @@ public abstract class Creature {
     private int defense;
     private Element element;
     
-    public Creature(int hp, int mana, int attack, int defense, Element element) {
+    public Creature(int hp, int currentHp, int mana, int currentMana, int attack, int defense, Element element) {
         this.hp = hp;
-        this.currentHp = hp;
+        this.currentHp = currentHp;
         this.mana = mana;
-        this.currentMana = mana;
+        this.currentMana = currentMana;
         this.attack = attack;
         this.defense = defense;
         this.element = element;

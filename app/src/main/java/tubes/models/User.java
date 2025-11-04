@@ -7,4 +7,8 @@ public class User {
     private String username;
     private String password; 
     private UserRole role;
+
+    public String getUsername(){
+        return this.username;
+    }
 }

@@ -7,8 +7,8 @@ public class Player extends Creature {
     private Weapon equippedWeapon;
     private Skill equippedSkill;
     
-    public Player(String username, int hp, int mana, int attack, int defense, Element element) {
-        super(hp, mana, attack, defense, element);
+    public Player(String username, int hp, int currentHp, int mana, int currentMana, int attack, int defense, Element element) {
+        super(hp, currentHp, mana, currentMana, attack, defense, element);
         this.username = username;
     }
     
