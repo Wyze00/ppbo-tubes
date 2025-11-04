@@ -1,0 +1,31 @@
+Jadi saya ingin membuat game turn base sederhana dengan bahasa pemograman java dan uinya menggunakan java swing. Akan menggunakan graddle dan akan menggunakan postgre sebagai databasenya.
+
+Untuk modelnya seperti file App.java tolong ditambahkan kalau ada yang kurang;
+
+Requitment :
+
+User 
+ - usename
+ - password
+ - coin
+
+StateChar
+  - hp
+  - ...
+
+StateStage
+  - stage
+  - ...
+
+1. Pasti ada login form, register form
+2. Akan ada shop, koin dari permainan bisa beli character. Dari awal ada character default
+3. Dimulai dari stage 1, tiap stage ada 5 enemy dan 1 boss. Akan ada generate enemy dan boss yang ambil random, terus nanti defaultnya dimultiplier dengan numberStage saat ini.
+4. Kalau berhasil mengalahkan enemy ke 2 dan 5 maka akan ada 3 pilihan bisa buff / weapon / potion raritynya makin tinggi makin kecil. Kalau berhasil lawan boss sama 3 pilihan tapi rarity yang lebih baik lebih tinggi. Juga dapat koin per stage yang diselesaikan
+5. Bisa save state, sedang distage mana, lawan boss / enemy yang bagaimana, berapa mana, hp dll saat ini. Nanti bisa lanjutkan. Per bikin stage selalu save state
+6. Skill untuk character / boss sudah ditentukan.
+7. Character, Enemy, Boss, Weapon, Skill, Buff, Potion sudah diinsert dalam database terlebih dulu
+8. Saat program baru dijalankan, enemy, boss, weapon, buff, potion langsung query all aja terus disimpan dalam repository
+9. Tiap turn bisa pakai skill, weapon, hand
+10. Kalau element kuat maka multiplier 1.2x kalau lemah 0.8x. Nanti ada fungsi isWeakElement(x,x);
+
+Dicoba dulu aja nanti saya perbaiki yang kurang;
