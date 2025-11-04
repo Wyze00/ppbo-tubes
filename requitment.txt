@@ -29,3 +29,17 @@ StateStage
 10. Kalau element kuat maka multiplier 1.2x kalau lemah 0.8x. Nanti ada fungsi isWeakElement(x,x);
 
 Dicoba dulu aja nanti saya perbaiki yang kurang;
+
+
+
+1. Player bisa login / register
+2. Kalau role admin maka dia ke panel admin yang bisa CRUD skill, dll
+3. Kalau role player maka bisa new game (kalau ada state maka hapus state itu) atau continue kalau ada state
+4. Saat new game maka ada difficulty. Makin mudah base hp, att, def, mana makin tinggi (tiap diff static, apakah perlu db lagi buat simpan ini?). Terus bisa pilih element, bakal dapat skill element itu yang common (pasti sudah ada 1). Weapon selalu null
+5. Mulai dari stage 1 dimana ada 5 enemy dan 1 boss. tiap makin tinggi stage maka base hp,att,def musuh dikali multiplier
+6. Bisa nyerang dengan tangan kosong, weapon kalo ada, dan skill.
+7. Element lemah maka total damage * 0.8 kalau kuat * 1.2
+8. Tiap ngalahin enemy / boss maka akan ada gacha 3 reward bisa weapon, skill, buff, potion (buff, potion lebih sering). Rarity lebih bawah lebih sering. Kalau boss raritynya lebih tinggi
+9. Buff langsung dipake, misal ATTACK buff dengan multiplier 10 maka attack * 1.1.
+10. Semua yang multiplier itu x%, misal 50 maka * 1.5. Untuk potion maka darah + 50% * totalHP
+9. Bisa save game / loadgame.
