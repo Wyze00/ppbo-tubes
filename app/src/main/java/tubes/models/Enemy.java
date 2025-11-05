@@ -9,7 +9,7 @@ public class Enemy extends Creature {
     private EnemyType type;
     
     public Enemy(int id, String name, EnemyType type, int hp, int mana, int attack, int defense, Element element) {
-        super(hp, mana, attack, defense, element);
+        super(hp, hp, mana, mana, attack, defense, element);
         this.id = id;
         this.name = name;
         this.type = type;

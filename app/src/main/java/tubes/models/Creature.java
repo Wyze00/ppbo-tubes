@@ -38,6 +38,65 @@ public abstract class Creature {
         return this.currentHp > 0;
     }
     
-    public int getCurrentHp() { return currentHp; }
-    public int getHp() { return hp; }
+    public int getHp() {
+        return hp;
+    }
+
+    public void setHp(int hp) {
+        this.hp = hp;
+        if (this.currentHp > hp) {
+            this.currentHp = hp;
+        }
+    }
+
+    public int getCurrentHp() {
+        return currentHp;
+    }
+
+    public void setCurrentHp(int currentHp) {
+        this.currentHp = Math.max(0, Math.min(this.hp, currentHp));
+    }
+
+    public int getMana() {
+        return mana;
+    }
+
+    public void setMana(int mana) {
+        this.mana = mana;
+        if (this.currentMana > mana) {
+            this.currentMana = mana;
+        }
+    }
+
+    public int getCurrentMana() {
+        return currentMana;
+    }
+
+    public void setCurrentMana(int currentMana) {
+        this.currentMana = Math.max(0, Math.min(this.mana, currentMana));
+    }
+
+    public int getAttack() {
+        return attack;
+    }
+
+    public void setAttack(int attack) {
+        this.attack = attack;
+    }
+
+    public int getDefense() {
+        return defense;
+    }
+
+    public void setDefense(int defense) {
+        this.defense = defense;
+    }
+
+    public Element getElement() {
+        return element;
+    }
+
+    public void setElement(Element element) {
+        this.element = element;
+    }
 }

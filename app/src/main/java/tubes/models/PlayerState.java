@@ -15,6 +15,22 @@ public class PlayerState {
     private int weaponId; 
     private int skillId;
 
+    public PlayerState(String username, int hp, int currentHp, int mana, int currentMana,
+                       int defense, int attack, Element element, int currentStage,
+                       int weaponId, int skillId) {
+        this.username = username;
+        this.hp = hp;
+        this.currentHp = currentHp;
+        this.mana = mana;
+        this.currentMana = currentMana;
+        this.defense = defense;
+        this.attack = attack;
+        this.element = element;
+        this.currentStage = currentStage;
+        this.weaponId = weaponId;
+        this.skillId = skillId;
+    }
+
     public String getUsername() {
         return username;
     }
