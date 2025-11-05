@@ -1,11 +1,13 @@
 package tubes.repositories;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
 import tubes.models.Weapon;
 
 public class WeaponRepo {
+    private Connection connection = Database.connect();
     
     public Weapon findById(int id){
         return null;
