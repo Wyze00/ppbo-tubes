@@ -1,6 +1,9 @@
 package tubes.views;
 
+import java.util.List;
+
 import tubes.models.Enemy;
+import tubes.models.Item;
 import tubes.models.Player;
 import tubes.models.enums.Element;
 
@@ -29,4 +32,10 @@ public class GameView {
     public void handleGameOver(){
         
     }
+
+    public Item handleShowReward(List<Item> item){
+        return item.get(0);
+    }
+
+    public void showRewardApplied(String name, String message){}
 }

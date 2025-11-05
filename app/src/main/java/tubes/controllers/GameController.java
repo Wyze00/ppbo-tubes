@@ -1,18 +1,24 @@
 package tubes.controllers;
 
-import java.lang.annotation.ElementType;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import tubes.models.Boss;
+import tubes.models.Buff;
 import tubes.models.Difficulty;
 import tubes.models.Enemy;
+import tubes.models.Item;
 import tubes.models.Player;
 import tubes.models.PlayerState;
+import tubes.models.Potion;
 import tubes.models.Skill;
 import tubes.models.User;
 import tubes.models.Weapon;
 import tubes.models.enums.Element;
+import tubes.models.enums.ItemType;
+import tubes.models.enums.Rarity;
+import tubes.repositories.BuffRepo;
 import tubes.repositories.DifficultyRepo;
 import tubes.repositories.PlayerStateRepo;
 import tubes.repositories.PotionRepo;
@@ -28,6 +34,7 @@ public class GameController {
     private GameView gameView = new GameView();
     private DifficultyRepo difficultyRepo = new DifficultyRepo();
     private PotionRepo potionRepo = new PotionRepo();
+    private BuffRepo buffRepo = new BuffRepo();
 
     private User user;
 
@@ -163,11 +170,109 @@ public class GameController {
 
     // Reward
 
-    public void getReward(Player player, String enemy){
+   public void getReward(Player player, String enemyType) {
+        
+        List<Item> rewardOptions = new ArrayList<>();
 
+        for (int i = 0; i < 3; i++) {
+            
+            ItemType chosenType = getWeightedItemType();
+            Rarity chosenRarity = getWeightedRarity(enemyType);
+            Item rewardItem = fetchRandomItem(chosenType, chosenRarity);
 
+            if (rewardItem == null) {
+                rewardItem = fetchRandomItem(chosenType, Rarity.COMMON);
+            }
+            
+            if (rewardItem != null) {
+                rewardOptions.add(rewardItem);
+            }
+        }
 
+        Item chosenItem = gameView.handleShowReward(rewardOptions);
+        applyReward(player, chosenItem);
+    }
 
+    private ItemType getWeightedItemType() {
+        Random random = new Random();
+        int chance = random.nextInt(100);
+        
+        if (chance < 40) { // 40% (0-39)
+            return ItemType.POTION;
+        } else if (chance < 80) { // 40% (40-79)
+            return ItemType.BUFF;
+        } else if (chance < 90) { // 10% (80-89)
+            return ItemType.WEAPON;
+        } else { // 10% (90-99)
+            return ItemType.SKILL;
+        }
+    }
+
+    private Rarity getWeightedRarity(String enemyType) {
+        Random random = new Random();
+        int chance = random.nextInt(100);
+        
+        if (enemyType.equals("boss")) {
+            if (chance < 5) return Rarity.COMMON;     // 5%
+            else if (chance < 35) return Rarity.UNCOMMON; // 30%
+            else if (chance < 75) return Rarity.RARE;      // 40%
+            else if (chance < 95) return Rarity.EPIC;      // 20%
+            else return Rarity.LEGENDARY;                 // 5%
+        } else {
+            if (chance < 50) return Rarity.COMMON;     // 50%
+            else if (chance < 75) return Rarity.UNCOMMON; // 25%
+            else if (chance < 90) return Rarity.RARE;      // 15%
+            else if (chance < 98) return Rarity.EPIC;      // 8%
+            else return Rarity.LEGENDARY;                 // 2% 
+        }
+    }
+
+    private Item fetchRandomItem(ItemType type, Rarity rarity) {
+        switch (type) {
+            case POTION:
+                // return potionRepo.findRandomByRarity(rarity);
+                return potionRepo.findById(0);
+            case BUFF:
+                // return buffRepo.findRandomByRarity(rarity);
+                return buffRepo.findById(0);
+
+            case WEAPON:
+                // return weaponRepo.findRandomByRarity(rarity);
+                return weaponRepo.findById(0);
+
+            case SKILL:
+                // return skillRepo.findRandomByRarity(rarity);
+                return skillRepo.findById(0);
+
+            default:
+                return null;
+        }
+    }
+
+    private void applyReward(Player player, Item item) {
+        
+        if (item instanceof Potion) {
+            Potion potion = (Potion) item;
+            // player.applyPotion(potion); // Player perlu method 'applyPotion'
+            gameView.showRewardApplied(potion.getName(), "Potion effect applied!");
+            
+        } else if (item instanceof Buff) {
+            Buff buff = (Buff) item;
+            // player.applyBuff(buff); // Player perlu method 'applyBuff'
+            gameView.showRewardApplied(buff.getName(), "Buff applied!");
+
+        } else if (item instanceof Weapon) {
+            Weapon newWeapon = (Weapon) item;
+            // if (gameView.askToEquipWeapon(newWeapon, player.getEquippedWeapon())) {
+            //     player.equipWeapon(newWeapon);
+            // }
+            
+        } else if (item instanceof Skill) {
+            Skill newSkill = (Skill) item;
+            // if (gameView.askToEquipSkill(newSkill, player.getEquippedSkill())) {
+            //     player.equipSkill(newSkill);
+            // }
+        }
     }
 
     // Combat
