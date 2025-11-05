@@ -15,10 +15,10 @@ public class BossRepo {
         return new ArrayList<Boss>();
     }
 
-    public void insert(Boss weapon) {}
+    public void insert(Boss boss) {}
 
-    public void delete(Boss weapon) {}
+    public void delete(Boss boss) {}
 
-    public void update(Boss weapon) {}
+    public void update(Boss boss) {}
     
 }

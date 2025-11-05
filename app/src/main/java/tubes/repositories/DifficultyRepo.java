@@ -15,10 +15,10 @@ public class DifficultyRepo {
         return new ArrayList<Difficulty>();
     }
 
-    public void insert(Difficulty weapon) {}
+    public void insert(Difficulty diff) {}
 
-    public void delete(Difficulty weapon) {}
+    public void delete(Difficulty diff) {}
 
-    public void update(Difficulty weapon) {}
+    public void update(Difficulty diff) {}
     
 }

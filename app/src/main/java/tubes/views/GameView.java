@@ -22,7 +22,7 @@ public class GameView {
         
     }
 
-    public String handleRunGame(Player player, Enemy enemy, String log){
+    public String handleRunGame(Player player, Enemy enemy, String log, boolean disableWeapon, boolean disableSkill){
         return "hand";
     }
 

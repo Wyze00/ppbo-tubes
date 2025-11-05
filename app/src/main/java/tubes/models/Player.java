@@ -7,6 +7,7 @@ public class Player extends Creature {
     private Weapon equippedWeapon;
     private Skill equippedSkill;
     private int stage;
+    private int skillCooldown;
     
     public Player(String username, int hp, int currentHp, int mana, int currentMana, int attack, int defense, Element element, int stage) {
         super(hp, currentHp, mana, currentMana, attack, defense, element);
@@ -52,5 +53,13 @@ public class Player extends Creature {
 
     public void setStage(int stage){
         this.stage = stage;
+    }
+
+    public int getSkillCooldown(){
+        return this.skillCooldown;
+    }
+
+    public void setSkillCooldown(int skillCooldown){
+        this.skillCooldown = skillCooldown;
     }
 }

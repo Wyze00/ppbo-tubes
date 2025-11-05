@@ -15,10 +15,10 @@ public class EnemyRepo {
         return new ArrayList<Enemy>();
     }
 
-    public void insert(Enemy weapon) {}
+    public void insert(Enemy enemy) {}
 
-    public void delete(Enemy weapon) {}
+    public void delete(Enemy enemy) {}
 
-    public void update(Enemy weapon) {}
+    public void update(Enemy enemy) {}
     
 }

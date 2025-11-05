@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tubes.models.Skill;
+import tubes.models.enums.Element;
 
 public class SkillRepo {
     
@@ -15,9 +16,13 @@ public class SkillRepo {
         return new ArrayList<Skill>();
     }
 
-    public void insert(Skill weapon) {}
+    public void insert(Skill skill) {}
 
-    public void delete(Skill weapon) {}
+    public void delete(Skill skill) {}
 
-    public void update(Skill weapon) {}
+    public void update(Skill skill) {}
+
+    public Skill findDefaultByElement(Element element){
+        return null;
+    }
 }

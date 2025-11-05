@@ -3,28 +3,24 @@ package tubes.models;
 import tubes.models.enums.Element;
 import tubes.models.enums.Rarity;
 
-public class Weapon {
-    private int id;
-    private String name;
+public class Weapon extends Item {
     private int attack;
     private int mana;
     private Element element;
-    private Rarity rarity;
+
+    public Weapon(int id, String name, Rarity rarity, int attack, int mana, Element element) {
+        super(id, name, rarity);
+        this.attack = attack;
+        this.mana = mana;
+        this.element = element;
+    }
 
     public int getWeaponId() {
-        return id;
+        return super.getId();
     }
 
     public void setWeaponId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+        super.setId(id);
     }
 
     public int getAttack() {
@@ -49,13 +45,5 @@ public class Weapon {
 
     public void setElement(Element element) {
         this.element = element;
-    }
-
-    public Rarity getRarity() {
-        return rarity;
-    }
-
-    public void setRarity(Rarity rarity) {
-        this.rarity = rarity;
     }
 }
