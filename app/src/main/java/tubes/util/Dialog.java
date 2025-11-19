@@ -1,6 +1,7 @@
 package tubes.util;
 
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 public class Dialog {
     
@@ -53,6 +54,15 @@ public class Dialog {
                 null, 
                 options, 
                 options[0]
+        );
+    }
+
+    public static void showCustomPanel(String title, JPanel panel){
+        JOptionPane.showMessageDialog(
+            null,
+            panel,
+            title,
+            JOptionPane.PLAIN_MESSAGE
         );
     }
 }

@@ -62,4 +62,21 @@ public class Player extends Creature {
     public void setSkillCooldown(int skillCooldown){
         this.skillCooldown = skillCooldown;
     }
+
+    public String toString() {
+
+        StringBuilder str = new StringBuilder(super.toString());
+        str.append("\n");
+        
+        if(this.getEquippedWeapon() != null){
+            str.append(this.getEquippedWeapon().toString());
+        } else {
+            str.append("Weapon: None\n");
+        }
+
+        str.append("\n");
+        str.append(this.getEquippedSkill().toString());
+
+        return str.toString();
+    }
 }

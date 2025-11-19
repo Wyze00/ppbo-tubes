@@ -99,4 +99,15 @@ public abstract class Creature {
     public void setElement(Element element) {
         this.element = element;
     }
+
+    public String toString(){
+        StringBuilder str = new StringBuilder();
+
+        str.append("Hp :" + this.getCurrentHp() + "/" + this.getHp() + "\n");
+        str.append("Mana :" + this.getCurrentMana() + "/" + this.getMana() + "\n");
+        str.append("Attack :" + this.getAttack() + "\n");
+        str.append("Defense :" + this.getDefense() + "\n");
+
+        return str.toString();
+    }
 }

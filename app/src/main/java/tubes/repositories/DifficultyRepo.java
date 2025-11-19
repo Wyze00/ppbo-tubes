@@ -12,7 +12,9 @@ public class DifficultyRepo {
     }
 
     public List<Difficulty> findAll(){
-        return new ArrayList<Difficulty>();
+        ArrayList<Difficulty> difficulties = new ArrayList<>();
+        difficulties.add(new Difficulty(0, "Easy", 150, 70, 15, 10));
+        return difficulties;
     }
 
     public void insert(Difficulty diff) {}

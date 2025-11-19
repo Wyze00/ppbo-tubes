@@ -15,8 +15,12 @@ import tubes.models.Potion;
 import tubes.models.Skill;
 import tubes.models.User;
 import tubes.models.Weapon;
+import tubes.models.enums.BuffType;
 import tubes.models.enums.Element;
+import tubes.models.enums.EnemyType;
 import tubes.models.enums.ItemType;
+import tubes.models.enums.PlayerAttackType;
+import tubes.models.enums.PotionType;
 import tubes.models.enums.Rarity;
 import tubes.repositories.BuffRepo;
 import tubes.repositories.DifficultyRepo;
@@ -24,6 +28,7 @@ import tubes.repositories.PlayerStateRepo;
 import tubes.repositories.PotionRepo;
 import tubes.repositories.SkillRepo;
 import tubes.repositories.WeaponRepo;
+import tubes.util.Dialog;
 import tubes.views.GameView;
 
 public class GameController {
@@ -84,32 +89,44 @@ public class GameController {
     }
 
     public void newGame(){
+        this.playerStateRepo.delete(this.user.getUsername());
 
+        // Pilih difficulty
         List<Difficulty> diffs = this.difficultyRepo.findAll();
-        int chooseDiff = this.gameView.handleChooseDifficulty();
+        String[] diffNames = new String[diffs.size()];
 
+        for(Difficulty d : diffs){
+            diffNames[diffs.indexOf(d)] = d.getName();    
+        }
+
+        int chooseDiff = this.gameView.handleChooseDifficulty(diffNames);
         Difficulty dif = diffs.get(chooseDiff);
-        Element element = this.gameView.handleChooseElement();
+
+        // Pilih element
+        Element element = Element.valueOf(this.gameView.handleChooseElement(Element.getAllNames()));
         
         Player player = new Player(this.user.getUsername(), dif.getBaseHp(), dif.getBaseHp(), dif.getBaseMana(), dif.getBaseMana(), dif.getBaseAttack(), dif.getBaseDefense(), element, 1);
-
         Skill defaultSkill = this.skillRepo.findDefaultByElement(element);
 
         player.setEquippedSkill(defaultSkill);
         player.setSkillCooldown(player.getEquippedSkill().getCooldown());
 
-        saveGame(player);
+        saveGame(player, true);
         runGame(player);
     }
 
-    public void saveGame(Player player){
+    public void saveGame(Player player, boolean isNew){
         PlayerState state = this.convertPlayerToPlayerState(player);
-        this.playerStateRepo.save(state);
+        if(isNew){
+            this.playerStateRepo.insert(state);
+        } else {
+            this.playerStateRepo.update(state);
+        }
+
         this.gameView.handleSaveGame();
     }
 
     public void runGame(Player player){
-
         boolean disableWeapon = false;
         boolean disableSkill = false;
 
@@ -164,7 +181,7 @@ public class GameController {
             }
     
             player.setStage(player.getStage()+1);
-            saveGame(player);
+            saveGame(player, false);
         }
     }
 
@@ -189,7 +206,20 @@ public class GameController {
             }
         }
 
-        Item chosenItem = gameView.handleShowReward(rewardOptions);
+        rewardOptions.add(null);
+
+        String[] optionNames = new String[rewardOptions.size()];
+
+        for(int i = 0; i < rewardOptions.size(); i++) {
+            if (rewardOptions.get(i) == null) {
+                optionNames[i] = "Tidak ambil reward";
+                continue;
+            }
+            optionNames[i] = rewardOptions.get(i).getName() + " (" + rewardOptions.get(i).getRarity().toString() + ")";
+        }
+
+        int choice = gameView.handleShowReward(optionNames);
+        Item chosenItem = rewardOptions.get(choice);
         applyReward(player, chosenItem);
     }
 
@@ -231,19 +261,17 @@ public class GameController {
         switch (type) {
             case POTION:
                 // return potionRepo.findRandomByRarity(rarity);
-                return potionRepo.findById(0);
+                return new Potion(0, "Small Health Potion", Rarity.COMMON, null, 25);
             case BUFF:
-                // return buffRepo.findRandomByRarity(rarity);
-                return buffRepo.findById(0);
+                // return buffRepo.findRandomByRarity(rarity);                
+                return new Buff(0, "Small Attack Boost", Rarity.COMMON, BuffType.ATTACK, 10); 
 
             case WEAPON:
                 // return weaponRepo.findRandomByRarity(rarity);
-                return weaponRepo.findById(0);
-
+                return new Weapon(1, "Fire Staff", Rarity.RARE, 10, 5, Element.FIRE);
             case SKILL:
                 // return skillRepo.findRandomByRarity(rarity);
-                return skillRepo.findById(0);
-
+                return new Skill(6, "Shadow Ball", Rarity.COMMON, 10, 10, 3, Element.DARK);
             default:
                 return null;
         }
@@ -253,38 +281,64 @@ public class GameController {
         
         if (item instanceof Potion) {
             Potion potion = (Potion) item;
-            // player.applyPotion(potion); // Player perlu method 'applyPotion'
-            gameView.showRewardApplied(potion.getName(), "Potion effect applied!");
+
+            if(potion.getPotionType() == PotionType.HEALTH){
+                player.setCurrentHp(Math.min(player.getHp(), player.getCurrentHp() + potion.getPotionEffect()));
+            } else {
+                player.setCurrentMana(Math.min(player.getMana(), player.getCurrentMana() + potion.getPotionEffect()));
+            }
             
         } else if (item instanceof Buff) {
             Buff buff = (Buff) item;
-            // player.applyBuff(buff); // Player perlu method 'applyBuff'
-            gameView.showRewardApplied(buff.getName(), "Buff applied!");
+
+            if(buff.getType() == BuffType.ATTACK){
+                player.setAttack(player.getAttack() + buff.getMultiplier());
+            } else if(buff.getType() == BuffType.DEFENSE){
+                player.setDefense(player.getDefense() + buff.getMultiplier());
+            } else if(buff.getType() == BuffType.HEALTH){
+                player.setHp(player.getHp() + buff.getMultiplier());
+                player.setCurrentHp(player.getCurrentHp() + buff.getMultiplier());
+            } else if(buff.getType() == BuffType.MANA){
+                player.setMana(player.getMana() + buff.getMultiplier());
+                player.setCurrentMana(player.getCurrentMana() + buff.getMultiplier());
+            }
 
         } else if (item instanceof Weapon) {
             Weapon newWeapon = (Weapon) item;
-            // if (gameView.askToEquipWeapon(newWeapon, player.getEquippedWeapon())) {
-            //     player.equipWeapon(newWeapon);
-            // }
-            
+            player.equipWeapon(newWeapon);
         } else if (item instanceof Skill) {
             Skill newSkill = (Skill) item;
-            // if (gameView.askToEquipSkill(newSkill, player.getEquippedSkill())) {
-            //     player.equipSkill(newSkill);
-            // }
+            player.equipSkill(newSkill);
         }
     }
 
     // Combat
 
     public List<Enemy> generate5EnemyAnd1Boss(){
-        return new ArrayList<Enemy>();
+        ArrayList<Enemy> enemies = new ArrayList<>();
+
+        enemies.add(new Enemy(0, "Goblin Scout", EnemyType.GOBLIN, 30, 3, 5, 0, Element.EARTH));
+        enemies.add(new Enemy(0, "Goblin Scout", EnemyType.GOBLIN, 30, 3, 5, 0, Element.EARTH));
+        enemies.add(new Enemy(0, "Goblin Scout", EnemyType.GOBLIN, 30, 3, 5, 0, Element.EARTH));
+        enemies.add(new Enemy(0, "Goblin Scout", EnemyType.GOBLIN, 30, 3, 5, 0, Element.EARTH));
+        enemies.add(new Enemy(0, "Goblin Scout", EnemyType.GOBLIN, 30, 3, 5, 0, Element.EARTH));
+
+        enemies.add(new Boss(0, "Goblin King", EnemyType.GOBLIN, 100, 10, 15, 0, Element.EARTH, 0));
+        
+        Enemy b = enemies.get(enemies.size()-1);
+        Boss boss = (Boss) b;
+        boss.setSkill(skillRepo.findDefaultByElement(null));
+
+        return enemies;
     }
 
     public TurnResult handlePlayerAttack(Player player, Enemy enemy, String attackType){
 
         TurnResult result = null;
-        player.setSkillCooldown(player.getSkillCooldown() - 1);
+
+        if(player.getSkillCooldown() != 0){
+            player.setSkillCooldown(player.getSkillCooldown() - 1);
+        }
 
         if(attackType.equalsIgnoreCase("hand")){
             result = handleHandAttack(player.getAttack(), player.getElement(), enemy.getDefense(), enemy.getElement());
@@ -331,20 +385,20 @@ public class GameController {
 
     public TurnResult handleHandAttack(int aAttack, Element aElement, int bDefense, Element bElement){
         double multiplier = isStrongerElement(aElement, bElement) ? 1.2 : 0.8;
-        int damage = 10;
-        return new TurnResult(damage, "attack with hand, dealt " + damage + "damage\n\n");
+        int damage = (int)((aAttack - bDefense) * multiplier);
+        return new TurnResult(damage, "attack with hand, dealt " + damage + "damage\n");
     }
 
     public TurnResult handleSkillAttack(int aAttack, int skillAttack, Element skillElement, int bDefense, Element bElement){
         double multiplier = isStrongerElement(skillElement, bElement) ? 1.2 : 0.8;
-        int damage = 10;
-        return new TurnResult(damage, "attack with skill, dealt " + damage + "damage\n\n");
+        int damage = (int)((aAttack - bDefense) * multiplier);
+        return new TurnResult(damage, "attack with skill, dealt " + damage + "damage\n");
     }
 
     public TurnResult handleWeaponAttack(int aAttack, int weaponAttack, Element weaponElement, int bDefense, Element bElement){
         double multiplier = isStrongerElement(weaponElement, bElement) ? 1.2 : 0.8;
-        int damage = 10;
-        return new TurnResult(damage, "attack with weapon, dealt " + damage + "damage\n\n");
+        int damage = (int)((aAttack - bDefense) * multiplier);
+        return new TurnResult(damage, "attack with weapon, dealt " + damage + "damage\n");
     }
 
     public boolean isStrongerElement(Element aElement, Element bElement){

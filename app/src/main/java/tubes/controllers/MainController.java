@@ -9,7 +9,7 @@ public class MainController {
     public void start(){
 
         // Auth
-        User user = null;
+        User user = new User("aaaaaa", null, UserRole.PLAYER);
         
         while(user == null) {
             user = authController.start();
