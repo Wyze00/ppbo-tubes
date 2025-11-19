@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import tubes.util.Dialog;
+
 public class Database {
     public static final String DATABASE = "tubes";
     public static final String PORT = "5432";
@@ -22,7 +24,8 @@ public class Database {
         try {
             connection = DriverManager.getConnection(URL, USER, PASSWORD);
         } catch (SQLException e) {
-            e.printStackTrace();
+            Dialog.outputInformation("Gagal Konek DB");
+            System.exit(0);
         }
         
         return connection;

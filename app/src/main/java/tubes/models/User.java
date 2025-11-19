@@ -15,11 +15,12 @@ public class User {
         this.role = role;
     }
 
-    public User(String username, String password, UserRole role){
-        this.id = id;
-        this.username = username;
-        this. password = password;
-        this.role = role;
+    public User(String username2, String password2, UserRole player) {
+        //TODO Auto-generated constructor stub
+    }
+
+    public int getId(){
+        return this.id;
     }
 
     public String getUsername(){

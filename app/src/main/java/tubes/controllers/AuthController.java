@@ -1,5 +1,7 @@
 package tubes.controllers;
 
+import tubes.util.Dialog;
+
 import tubes.models.User;
 import tubes.models.dto.LoginForm;
 import tubes.models.enums.UserRole;
@@ -57,9 +59,11 @@ public class AuthController {
         return newUser;
     }
 
-    // Not implemented
     public void validateLoginForm(LoginForm form) throws Exception {
-        // Cek username dan password
-        throw new Exception("Panjang password minimal 6");
+        if(form.getPassword().length() < 6){
+            throw new Exception("Password Minimal 6 karakter");
+        }
+
+        Dialog.outputInformation("debug " + form.getUsername() + form.getPassword());
     }
 }
