@@ -19,6 +19,8 @@ import tubes.models.enums.BuffType;
 import tubes.models.enums.Element;
 import tubes.models.enums.EnemyType;
 import tubes.models.enums.ItemType;
+import tubes.models.enums.PlayerAttackType;
+import tubes.models.enums.PotionType;
 import tubes.models.enums.Rarity;
 import tubes.repositories.BuffRepo;
 import tubes.repositories.DifficultyRepo;
@@ -280,7 +282,7 @@ public class GameController {
         if (item instanceof Potion) {
             Potion potion = (Potion) item;
 
-            if(potion.getPotionType().equals("HEALTH")){
+            if(potion.getPotionType() == PotionType.HEALTH){
                 player.setCurrentHp(Math.min(player.getHp(), player.getCurrentHp() + potion.getPotionEffect()));
             } else {
                 player.setCurrentMana(Math.min(player.getMana(), player.getCurrentMana() + potion.getPotionEffect()));

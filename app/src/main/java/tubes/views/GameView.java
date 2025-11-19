@@ -59,6 +59,8 @@ public class GameView {
 
     public String handleRunGame(Player player, Enemy enemy, String log, boolean disableWeapon, boolean disableSkill){
 
+        final String[] options = new String[]{"hand"};
+
         Dialog.outputInformation(log);
         Dialog.outputInformation(player.toString());
         Dialog.outputInformation(enemy.toString());

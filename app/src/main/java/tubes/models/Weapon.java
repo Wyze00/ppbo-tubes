@@ -46,4 +46,14 @@ public class Weapon extends Item {
     public void setElement(Element element) {
         this.element = element;
     }
+
+    public String toString(){
+        StringBuilder str = new StringBuilder();
+        str.append("Weapon Name: ").append(this.getName()).append("\n");
+        str.append("Rarity: ").append(this.getRarity().toString()).append("\n");
+        str.append("Attack: ").append(this.getAttack()).append("\n");
+        str.append("Mana: ").append(this.getMana()).append("\n");
+        str.append("Element: ").append(this.getElement().getName()).append("\n");
+        return str.toString();
+    }
 }

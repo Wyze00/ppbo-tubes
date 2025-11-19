@@ -66,14 +66,16 @@ public class Player extends Creature {
     public String toString() {
 
         StringBuilder str = new StringBuilder(super.toString());
-    
-        str.append("Skill: " + this.getEquippedSkill().getName() + " (Cooldown: " + this.getSkillCooldown() + ")\n");
+        str.append("\n");
         
         if(this.getEquippedWeapon() != null){
-            str.append("Weapon: " + this.getEquippedWeapon().getName() + "\n");
+            str.append(this.getEquippedWeapon().toString());
         } else {
             str.append("Weapon: None\n");
         }
+
+        str.append("\n");
+        str.append(this.getEquippedSkill().toString());
 
         return str.toString();
     }
