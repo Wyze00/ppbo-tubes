@@ -169,6 +169,9 @@ INSERT INTO "Weapon" ("name", "attack", "mana", "element", "rarity") VALUES
 ('Thunder Hammer', 30, 15, 'LIGHTNING', 'EPIC'),
 ('Excalibur', 70, 30, 'LIGHT', 'LEGENDARY');
 
+INSERT INTO "Weapon" ("id","name", "attack", "mana", "element", "rarity") VALUES
+(0, 'none', 0, 0, 'LIGHT', 'LEGENDARY');
+
 -- Potion
 INSERT INTO "Potion" ("name", "potionType", "potionEffect", "rarity") VALUES
 ('Small Health Potion', 'HEALTH', 25, 'COMMON'),
