@@ -1,5 +1,7 @@
 package tubes.controllers;
 
+import tubes.util.Dialog;
+
 import tubes.models.User;
 import tubes.models.dto.LoginForm;
 import tubes.models.enums.UserRole;
@@ -38,6 +40,7 @@ public class AuthController {
             throw new Exception("Username / Password Salah");
         }
 
+        authView.handleSuccess("Login Berhasil");
         return user;
     }
 
@@ -50,16 +53,17 @@ public class AuthController {
         if(user != null){
             throw new Exception("Username sudah ada");
         }
-        
+
         User newUser = new User(form.getUsername(), form.getPassword(), UserRole.PLAYER);
         this.userRepo.insert(newUser);
 
-        return newUser;
+        authView.handleSuccess("Registrasi Berhasil");
+        return this.userRepo.findByUsername(newUser.getUsername());
     }
 
-    // Not implemented
     public void validateLoginForm(LoginForm form) throws Exception {
-        // Cek username dan password
-        throw new Exception("Panjang password minimal 6");
+        if(form.getPassword().length() < 6){
+            throw new Exception("Password Minimal 6 karakter");
+        }
     }
 }

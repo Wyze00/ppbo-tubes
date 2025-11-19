@@ -46,7 +46,7 @@ CREATE TABLE "User" (
   "username" varchar(20) UNIQUE NOT NULL,
   "password" varchar(50) NOT NULL,
   "role" "UserRole" NOT NULL,
-  "created_at" timestamp
+  "created_at" timestamp NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE "Weapon" (

@@ -7,7 +7,7 @@ public class AdminController {
     private AdminView adminView = new AdminView();
     private WeaponView weaponView = new WeaponView();
 
-    // Admin bisa nambah enemy, boss, weapon, skill, buff, potion, difficulty
+    // Admin bisa nambah enemy, boss, weapon, skill, buff, potion
     public void start(){
 
         // 1 - 7
