@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class UserRepo {
 
     public User findByUsername(String username) {
         
-        query = "SELECT * FROM users WHERE username = ?";
+        query = "SELECT * FROM \"User\" WHERE username = ?";
 
         try {
             
@@ -28,14 +29,7 @@ public class UserRepo {
             resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                User user = new User(
-                    resultSet.getInt("id"),
-                    resultSet.getString("username"),
-                    resultSet.getString("password"),
-                    UserRole.valueOf(resultSet.getString("role"))
-                );
-
-                return user;
+                return convertResultSet();
             }
 
         } catch (SQLException e) {
@@ -49,9 +43,31 @@ public class UserRepo {
         return new ArrayList<User>();
     }
 
-    public void insert(User weapon) {}
+    public void insert(User user) {
+        query = "INSERT INTO \"User\" (username, password, role) VALUES (?, ?, ?::\"UserRole\")";
+
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setString(1, user.getUsername());
+            statement.setString(2, user.getPassword());
+            statement.setObject(3, user.getRole().getName(), Types.OTHER);
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            Dialog.outputError(e.getMessage());
+        }
+    }
 
     public void delete(User weapon) {}
 
     public void update(User weapon) {}
+
+    public User convertResultSet() throws SQLException {
+        return new User(
+                resultSet.getInt("id"),
+                resultSet.getString("username"),
+                resultSet.getString("password"),
+                UserRole.valueOf(resultSet.getString("role"))
+        );
+    }
 }

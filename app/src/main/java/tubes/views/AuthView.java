@@ -34,15 +34,18 @@ public class AuthView {
                 JOptionPane.PLAIN_MESSAGE
         );
 
-        return new LoginForm(userField.getText(), passField.getPassword().toString());
+        return new LoginForm(userField.getText(), String.valueOf(passField.getPassword()));
     }
 
     public LoginForm handleRegister(){
         return handleLogin();
     }
 
-    // Not implemented
     public void handleError(String message){
         Dialog.outputError(message);
+    }
+
+    public void handleSuccess(String message){
+        Dialog.outputInformation(message);
     }
 }

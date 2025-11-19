@@ -40,6 +40,7 @@ public class AuthController {
             throw new Exception("Username / Password Salah");
         }
 
+        authView.handleSuccess("Login Berhasil");
         return user;
     }
 
@@ -52,18 +53,17 @@ public class AuthController {
         if(user != null){
             throw new Exception("Username sudah ada");
         }
-        
+
         User newUser = new User(form.getUsername(), form.getPassword(), UserRole.PLAYER);
         this.userRepo.insert(newUser);
 
-        return newUser;
+        authView.handleSuccess("Registrasi Berhasil");
+        return this.userRepo.findByUsername(newUser.getUsername());
     }
 
     public void validateLoginForm(LoginForm form) throws Exception {
         if(form.getPassword().length() < 6){
             throw new Exception("Password Minimal 6 karakter");
         }
-
-        Dialog.outputInformation("debug " + form.getUsername() + form.getPassword());
     }
 }

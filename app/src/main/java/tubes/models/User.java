@@ -15,8 +15,8 @@ public class User {
         this.role = role;
     }
 
-    public User(String username2, String password2, UserRole player) {
-        //TODO Auto-generated constructor stub
+    public User(String username, String password, UserRole role) {
+        this(0, username, password, role);
     }
 
     public int getId(){
