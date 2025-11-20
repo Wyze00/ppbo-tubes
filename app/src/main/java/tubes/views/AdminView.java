@@ -13,6 +13,7 @@ public class AdminView {
                       "4. Manage Skills\n" +
                       "5. Manage Buffs\n" +
                       "6. Manage Potions\n" +
+                      "7. Manage Difficulty\n" +
                       "0. Logout\n";
 
         return Dialog.inputInt(menu);

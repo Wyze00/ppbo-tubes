@@ -64,4 +64,13 @@ public class Difficulty {
     public void setBaseDefense(int baseDefense) {
         this.baseDefense = baseDefense;
     }
+
+    public String toString() {
+        return "Difficulty ID: " + id +
+               "\nName: " + name +
+               "\nBase HP: " + baseHp +
+               "\nBase Mana: " + baseMana +
+               "\nBase Attack: " + baseAttack +
+               "\nBase Defense: " + baseDefense + "\n";
+    }
 }
