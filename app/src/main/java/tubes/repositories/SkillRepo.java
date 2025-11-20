@@ -94,7 +94,6 @@ public class SkillRepo {
             Dialog.outputError(e.getMessage());
         }
         
-        // Fallback seperti yang ada di file SkillRepo original (sebelum diubah)
         return null;
     }
 
