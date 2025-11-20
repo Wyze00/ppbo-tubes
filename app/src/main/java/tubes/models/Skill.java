@@ -59,6 +59,7 @@ public class Skill extends Item {
 
     public String toString(){
         StringBuilder str = new StringBuilder();
+        str.append("Skill ID: ").append(this.getSkillId()).append("\n");
         str.append("Skill Name: ").append(this.getName()).append("\n");
         str.append("Rarity: ").append(this.getRarity().toString()).append("\n");
         str.append("Attack: ").append(this.getAttack()).append("\n");
