@@ -62,7 +62,7 @@ public class AuthController {
     }
 
     public void validateLoginForm(LoginForm form) throws Exception {
-        if(form.getPassword().length() < 6){
+        if(form.getPassword().length() < 5){
             throw new Exception("Password Minimal 6 karakter");
         }
     }

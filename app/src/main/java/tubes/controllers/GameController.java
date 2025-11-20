@@ -22,8 +22,10 @@ import tubes.models.enums.ItemType;
 import tubes.models.enums.PlayerAttackType;
 import tubes.models.enums.PotionType;
 import tubes.models.enums.Rarity;
+import tubes.repositories.BossRepo;
 import tubes.repositories.BuffRepo;
 import tubes.repositories.DifficultyRepo;
+import tubes.repositories.EnemyRepo;
 import tubes.repositories.PlayerStateRepo;
 import tubes.repositories.PotionRepo;
 import tubes.repositories.SkillRepo;
@@ -40,6 +42,8 @@ public class GameController {
     private DifficultyRepo difficultyRepo = new DifficultyRepo();
     private PotionRepo potionRepo = new PotionRepo();
     private BuffRepo buffRepo = new BuffRepo();
+    private EnemyRepo enemyRepo = new EnemyRepo();
+    private BossRepo bossRepo = new BossRepo();
 
     private User user;
 
@@ -260,7 +264,6 @@ public class GameController {
     private Item fetchRandomItem(ItemType type, Rarity rarity) {
         switch (type) {
             case POTION:
-                // return potionRepo.findRandomByRarity(rarity);
                 return new Potion(0, "Small Health Potion", Rarity.COMMON, null, 25);
             case BUFF:
                 // return buffRepo.findRandomByRarity(rarity);                
@@ -315,21 +318,25 @@ public class GameController {
     // Combat
 
     public List<Enemy> generate5EnemyAnd1Boss(){
-        ArrayList<Enemy> enemies = new ArrayList<>();
 
-        enemies.add(new Enemy(0, "Goblin Scout", EnemyType.GOBLIN, 30, 3, 5, 0, Element.EARTH));
-        enemies.add(new Enemy(0, "Goblin Scout", EnemyType.GOBLIN, 30, 3, 5, 0, Element.EARTH));
-        enemies.add(new Enemy(0, "Goblin Scout", EnemyType.GOBLIN, 30, 3, 5, 0, Element.EARTH));
-        enemies.add(new Enemy(0, "Goblin Scout", EnemyType.GOBLIN, 30, 3, 5, 0, Element.EARTH));
-        enemies.add(new Enemy(0, "Goblin Scout", EnemyType.GOBLIN, 30, 3, 5, 0, Element.EARTH));
+        ArrayList<Enemy> shuffledEnemies = new ArrayList<>();
+        List<Enemy> enemies = enemyRepo.findAll();
+        List<Boss> bosses = bossRepo.findAll();
 
-        enemies.add(new Boss(0, "Goblin King", EnemyType.GOBLIN, 100, 10, 15, 0, Element.EARTH, 0));
-        
-        Enemy b = enemies.get(enemies.size()-1);
+        for(int i = 0; i < 5; i++){
+            Random rand = new Random();
+            int randomIndex = rand.nextInt(enemies.size());
+            shuffledEnemies.add(enemies.get(randomIndex));
+            enemies.remove(randomIndex);
+        }
+
+        shuffledEnemies.add(bosses.get(new Random().nextInt(bosses.size())));
+
+        Enemy b = shuffledEnemies.get(shuffledEnemies.size()-1);
         Boss boss = (Boss) b;
-        boss.setSkill(skillRepo.findDefaultByElement(null));
+        boss.setSkill(skillRepo.findDefaultByElement(boss.getElement()));
 
-        return enemies;
+        return shuffledEnemies;
     }
 
     public TurnResult handlePlayerAttack(Player player, Enemy enemy, String attackType){
