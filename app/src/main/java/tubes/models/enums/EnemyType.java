@@ -16,4 +16,13 @@ public enum EnemyType {
     public String getName() {
         return name;
     }
+
+    public static String[] getAllNames() {
+        EnemyType[] types = EnemyType.values();
+        String[] names = new String[types.length];
+        for (int i = 0; i < types.length; i++) {
+            names[i] = types[i].getName();
+        }
+        return names;
+    }
 }
