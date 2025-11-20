@@ -36,4 +36,12 @@ public class Potion extends Item {
     public void setPotionEffect(int potionEffect) {
         this.potionEffect = potionEffect;
     }
+
+    public String toString(){
+        return "Potion ID: " + super.getId() +
+               "\nName: " + super.getName() +
+               "\nRarity: " + super.getRarity().name() +
+               "\nType: " + potionType.getName() +
+               "\nEffect: " + potionEffect + "\n";
+    }
 }

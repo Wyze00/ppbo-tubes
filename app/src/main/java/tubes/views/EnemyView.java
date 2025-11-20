@@ -11,7 +11,7 @@ import tubes.util.Dialog;
 public class EnemyView {
     private EnemyController enemyController = new EnemyController();
 
-    public void handleEnemyView () {
+    public void handleEnemyMenu () {
         String menu =  "=== Enemy Menu ===\n" +
                       "1. View All Enemy\n" +
                       "2. Add Enemy\n" +

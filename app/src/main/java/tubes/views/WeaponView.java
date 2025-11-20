@@ -11,12 +11,13 @@ import tubes.util.Dialog;
 public class WeaponView {
     private WeaponController weaponController = new WeaponController();
 
-    public void handleMainMenu(){
+    public void handleWeaponMenu(){
 
         String menu =  "=== Weapon Menu ===\n" +
                       "1. View All Weapons\n" +
                       "2. Add Weapon\n" +
                       "3. Delete Weapon\n" +
+
                       "0. Back to Main Menu\n" +
                       "Choose an option: ";
 

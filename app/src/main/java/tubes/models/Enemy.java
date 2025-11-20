@@ -41,6 +41,7 @@ public class Enemy extends Creature {
 
     public String toString(){
         StringBuilder str = new StringBuilder();
+        str.append("Enemy ID: ").append(this.getId()).append("\n");
         str.append("Enemy Name: ").append(this.getName()).append("\n");
         str.append("Type: ").append(this.getType().toString()).append("\n");
         str.append("HP: ").append(this.getCurrentHp()).append("/").append(this.getHp()).append("\n");

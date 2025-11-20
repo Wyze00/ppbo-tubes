@@ -58,6 +58,7 @@ public class EnemyRepo {
             statement.setObject(6, enemy.getElement().getName(), Types.OTHER);
 
             statement.executeUpdate();
+            Dialog.outputInformation("Enemy " + enemy.getName() + " inserted successfully to database.");
 
         } catch (SQLException e) {
             Dialog.outputError(e.getMessage());

@@ -28,4 +28,12 @@ public class Buff extends Item {
     public void setMultiplier(int multiplier) {
         this.multiplier = multiplier;
     }
+
+    public String toString(){
+        return "Buff ID: " + super.getId() +
+               "\nName: " + super.getName() +
+               "\nRarity: " + super.getRarity().name() +
+               "\nType: " + type.name() +
+               "\nMultiplier: " + multiplier + "%\n";
+    }
 }
