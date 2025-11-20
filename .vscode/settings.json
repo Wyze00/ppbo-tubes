@@ -11,6 +11,32 @@
             "database": "tbs",
             "username": "postgres",
             "password": "postgres"
+        },
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "t",
+            "database": "tbs",
+            "username": "root",
+            "password": ""
+        },
+        {
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "asdfdd",
+            "database": "tbs",
+            "username": "postgres",
+            "password": ""
         }
     ]
 }

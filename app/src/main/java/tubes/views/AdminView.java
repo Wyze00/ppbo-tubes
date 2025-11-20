@@ -1,13 +1,20 @@
 package tubes.views;
 
+import tubes.util.Dialog;
+
 public class AdminView {
     
-    // Not Implemented
     public int handleMainMenu(){
 
-        // 1 = weapon
-        // 2 = dll
+        String menu =  "=== Admin Menu ===\n" +
+                      "1. Manage Weapons\n" +
+                      "2. Manage Enemies\n" +
+                      "3. Manage Bosses\n" +
+                      "4. Manage Skills\n" +
+                      "5. Manage Buffs\n" +
+                      "6. Manage Potions\n" +
+                      "0. Logout\n";
 
-        return 1;
+        return Dialog.inputInt(menu);
     }
 }
