@@ -1,7 +1,6 @@
 package tubes.controllers;
 
 import java.util.List;
-
 import tubes.models.Weapon;
 import tubes.repositories.WeaponRepo;
 
@@ -11,7 +10,6 @@ public class WeaponController {
     public List<Weapon> getAllWeapons(){
         return weaponRepo.findAll();
     }
-
 
     public void addWeapon(Weapon weapon){
         weaponRepo.insert(weapon);

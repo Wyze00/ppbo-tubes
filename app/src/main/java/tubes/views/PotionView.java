@@ -1,9 +1,7 @@
 package tubes.views;
 
 import java.util.List;
-
 import tubes.controllers.PotionController;
-import tubes.models.Buff;
 import tubes.models.Potion;
 import tubes.models.enums.PotionType;
 import tubes.models.enums.Rarity;
@@ -14,29 +12,18 @@ public class PotionView {
 
     public void handlePotionMenu(){
 
-        String menu =  "=== Potion Menu ===\n" +
+        String menu = "Potion Menu\n" +
                       "1. View All Potions\n" +
                       "2. Add Potion\n" +
                       "3. Delete Potion\n" +
-                      "0. Back to Admin Menu\n" +
-                      "Choose an option: ";
+                      "0. Back to Admin Menu\n";
 
         int choice = Dialog.inputInt(menu);
 
         switch(choice){
-            case 1:
-                this.handleViewAllPotions();
-                break;
-            case 2:
-                this.handleAddPotion();
-                break;
-            case 3:
-                this.handleDeletePotion();
-                break;
-            case 0:
-                return;
-            default:
-                Dialog.outputInformation("Invalid option. Please try again.");
+            case 1 -> this.handleViewAllPotions();
+            case 2 -> this.handleAddPotion();
+            case 3 -> this.handleDeletePotion();
         }
     }
 
@@ -67,11 +54,6 @@ public class PotionView {
     public void handleDeletePotion(){
         List<Potion> potionsData = potionController.getAllPotions();
         
-        if (potionsData.isEmpty()) {
-            Dialog.outputInformation("No potions to delete.");
-            return;
-        }
-
         String[] potionNames = new String[potionsData.size()];
         for(int i = 0; i < potionsData.size(); i++){
             potionNames[i] = potionsData.get(i).getPotionId() + ". " + potionsData.get(i).getName();

@@ -6,9 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import tubes.models.Boss;
-import tubes.models.Enemy;
 import tubes.models.enums.Element;
 import tubes.models.enums.EnemyType;
 import tubes.util.Dialog;

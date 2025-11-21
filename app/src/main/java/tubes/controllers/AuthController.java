@@ -1,7 +1,5 @@
 package tubes.controllers;
 
-import tubes.util.Dialog;
-
 import tubes.models.User;
 import tubes.models.dto.LoginForm;
 import tubes.models.enums.UserRole;

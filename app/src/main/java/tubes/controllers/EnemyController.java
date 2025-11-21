@@ -1,7 +1,6 @@
 package tubes.controllers;
 
 import java.util.List;
-
 import tubes.models.Enemy;
 import tubes.repositories.EnemyRepo;
 
@@ -11,7 +10,6 @@ public class EnemyController {
     public List<Enemy> getAllEnemies(){
         return enemyRepo.findAll();
     }
-
 
     public void addEnemy(Enemy enemy){
         enemyRepo.insert(enemy);

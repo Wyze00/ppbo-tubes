@@ -17,9 +17,7 @@ import tubes.models.User;
 import tubes.models.Weapon;
 import tubes.models.enums.BuffType;
 import tubes.models.enums.Element;
-import tubes.models.enums.EnemyType;
 import tubes.models.enums.ItemType;
-import tubes.models.enums.PlayerAttackType;
 import tubes.models.enums.PotionType;
 import tubes.models.enums.Rarity;
 import tubes.repositories.BossRepo;
@@ -30,7 +28,6 @@ import tubes.repositories.PlayerStateRepo;
 import tubes.repositories.PotionRepo;
 import tubes.repositories.SkillRepo;
 import tubes.repositories.WeaponRepo;
-import tubes.util.Dialog;
 import tubes.views.GameView;
 
 public class GameController {

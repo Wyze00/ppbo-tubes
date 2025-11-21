@@ -1,7 +1,6 @@
 package tubes.views;
 
 import java.util.List;
-
 import tubes.controllers.EnemyController;
 import tubes.models.Enemy;
 import tubes.models.enums.EnemyType;
@@ -12,29 +11,18 @@ public class EnemyView {
     private EnemyController enemyController = new EnemyController();
 
     public void handleEnemyMenu () {
-        String menu =  "=== Enemy Menu ===\n" +
+        String menu = "Enemy Menu\n" +
                       "1. View All Enemy\n" +
                       "2. Add Enemy\n" +
                       "3. Delete Enemy\n" +
-                      "0. Back to Main Menu\n" +
-                      "Choose an option: ";
+                      "0. Back to Main Menu\n";
 
         int choice = Dialog.inputInt(menu);
 
         switch(choice){
-            case 1:
-                this.handleViewAllEnemy();
-                break;
-            case 2:
-                this.handleAddEnemy();
-                break;
-            case 3:
-                this.handleDeleteEnemy();
-                break;
-            case 0:
-                return;
-            default:
-                Dialog.outputInformation("Invalid option. Please try again.");
+            case 1 -> this.handleViewAllEnemy();
+            case 2 -> this.handleAddEnemy();
+            case 3 -> this.handleDeleteEnemy();
         }
     }
 
@@ -69,19 +57,14 @@ public class EnemyView {
     public void handleDeleteEnemy(){
         List<Enemy> enemyData = enemyController.getAllEnemies();
 
+        String[] enemyNames = new String[enemyData.size()];
         for(int i = 0; i < enemyData.size(); i++){
-            Dialog.outputInformation((i+1) + ". " + enemyData.get(i).getName());
+            enemyNames[i] = enemyData.get(i).getName();
         }
 
-        int choice = Dialog.inputInt("Select enemy to delete (0 to cancel): ");
+        int enemyChoose = Dialog.inputChoice("Select enemy to delete:", enemyNames);
+        Enemy selectedEnemy = enemyData.get(enemyChoose);
 
-        if(choice > 0 && choice <= enemyData.size()){
-            enemyController.deleteEnemy(enemyData.get(choice - 1));
-            Dialog.outputInformation("Enemy deleted successfully.");
-        } else if (choice == 0) {
-            Dialog.outputInformation("Deletion cancelled.");
-        } else {
-            Dialog.outputInformation("Invalid choice. Please try again.");
-        }
+        enemyController.deleteEnemy(selectedEnemy);
     }
 }

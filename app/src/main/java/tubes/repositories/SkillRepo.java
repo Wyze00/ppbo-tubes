@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
-
 import tubes.models.Skill;
 import tubes.models.enums.Element;
 import tubes.models.enums.Rarity;
@@ -97,13 +96,36 @@ public class SkillRepo {
         return null;
     }
 
+    public List<Skill> findByRarity(Rarity rarity){
+        query = "SELECT * FROM \"Skill\" WHERE rarity = ?::\"Rarity\"";
+
+        try {
+            
+            statement = connection.prepareStatement(query);
+            statement.setObject(1, rarity.getName(), Types.OTHER);
+            resultSet = statement.executeQuery();
+            List<Skill> skills = new ArrayList<Skill>();
+
+            while(resultSet.next()) {
+                skills.add(convertResultSet());
+            }
+
+            return skills;
+            
+        } catch (SQLException e) {
+            Dialog.outputError(e.getMessage());
+        }
+
+        return null;
+    }
+
     public Skill convertResultSet() throws SQLException {
         return new Skill(
             resultSet.getInt("id"),
             resultSet.getString("name"),
             Rarity.valueOf(resultSet.getString("rarity")),
             resultSet.getInt("attack"),
-            resultSet.getInt("mana"), // Kolom 'mana' di DB jadi 'manaCost' di model
+            resultSet.getInt("mana"),
             resultSet.getInt("cooldown"),
             Element.valueOf(resultSet.getString("element"))
         );

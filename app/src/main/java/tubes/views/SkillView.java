@@ -1,9 +1,7 @@
 package tubes.views;
 
 import java.util.List;
-
 import tubes.controllers.SkillController;
-import tubes.models.Boss;
 import tubes.models.Skill;
 import tubes.models.enums.Element;
 import tubes.models.enums.Rarity;
@@ -14,7 +12,7 @@ public class SkillView {
 
     public void handleSkillMenu(){
 
-        String menu =  "=== Skill Menu ===\n" +
+        String menu = "Skill Menu \n" +
                       "1. View All Skills\n" +
                       "2. Add Skill\n" +
                       "3. Delete Skill\n" +
@@ -24,19 +22,9 @@ public class SkillView {
         int choice = Dialog.inputInt(menu);
 
         switch(choice){
-            case 1:
-                this.handleViewAllSkills();
-                break;
-            case 2:
-                this.handleAddSkill();
-                break;
-            case 3:
-                this.handleDeleteSkill();
-                break;
-            case 0:
-                return;
-            default:
-                Dialog.outputInformation("Invalid option. Please try again.");
+            case 1 -> this.handleViewAllSkills();
+            case 2 -> this.handleAddSkill();
+            case 3 -> this.handleDeleteSkill();
         }
     }
 
@@ -65,17 +53,11 @@ public class SkillView {
         int elementChoose = Dialog.inputChoice("Select skill element:", allElementNames);
         Element element = Element.valueOf(allElementNames[elementChoose]);
 
-        // Skill constructor: Skill(int id, String name, Rarity rarity, int attack, int manaCost, int cooldown, Element element)
         skillController.addSkill(new Skill(0, name, rarity, attack, manaCost, cooldown, element));
     }
 
     public void handleDeleteSkill(){
         List<Skill> skillsData = skillController.getAllSkills();
-        
-        if (skillsData.isEmpty()) {
-            Dialog.outputInformation("No skills to delete.");
-            return;
-        }
 
         String[] skillNames = new String[skillsData.size()];
         for(int i = 0; i < skillsData.size(); i++){

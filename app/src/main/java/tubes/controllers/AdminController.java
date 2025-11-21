@@ -18,7 +18,7 @@ public class AdminController {
     private PotionView potionView = new PotionView();
     private BuffView buffView = new BuffView();
     private DifficultyView difficultyView = new DifficultyView();
-    // Admin bisa nambah enemy, boss, weapon, skill, buff, potion
+    
     public void start(){
         int choice = adminView.handleMainMenu();
         
@@ -31,8 +31,7 @@ public class AdminController {
                 case 5 -> buffView.handleBuffMenu();
                 case 6 -> potionView.handlePotionMenu();
                 case 7 -> difficultyView.handleDifficultyMenu();
-                default -> System.out.println("Exiting Admin Menu");
-                
+                default -> System.exit(0);
             }
 
             choice = adminView.handleMainMenu();

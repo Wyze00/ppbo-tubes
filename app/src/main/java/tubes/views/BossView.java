@@ -1,9 +1,8 @@
 package tubes.views;
-import java.util.List;
 
+import java.util.List;
 import tubes.controllers.BossController;
 import tubes.models.Boss;
-import tubes.models.Enemy;
 import tubes.models.enums.EnemyType;
 import tubes.models.enums.Element;
 import tubes.util.Dialog;
@@ -12,29 +11,18 @@ public class BossView {
     private BossController bossController = new BossController();
 
     public void handleBossMenu () {
-        String menu =  "=== Boss Menu ===\n" +
+        String menu = "Boss Menu\n" +
                       "1. View All Boss\n" +
                       "2. Add Boss\n" +
                       "3. Delete Boss\n" +
-                      "0. Back to Main Menu\n" +
-                      "Choose an option: ";
+                      "0. Back to Main Menu\n";
 
         int choice = Dialog.inputInt(menu);
 
         switch(choice){
-            case 1:
-                this.handleViewAllBoss();
-                break;
-            case 2:
-                this.handleAddBoss();
-                break;
-            case 3:
-                this.handleDeleteBoss();
-                break;
-            case 0:
-                return;
-            default:
-                Dialog.outputInformation("Invalid option. Please try again.");
+            case 1 -> this.handleViewAllBoss();
+            case 2 -> this.handleAddBoss();
+            case 3 -> this.handleDeleteBoss();
         }
     }
 
@@ -72,19 +60,14 @@ public class BossView {
     public void handleDeleteBoss(){
         List<Boss> bossData = bossController.getAllBosses();
 
+        String[] bossNames = new String[bossData.size()];
         for(int i = 0; i < bossData.size(); i++){
-            Dialog.outputInformation((i+1) + ". " + bossData.get(i).getName());
+            bossNames[i] = bossData.get(i).getName();
         }
 
-        int choice = Dialog.inputInt("Select Boss to delete (0 to cancel): ");
+        int bossChoose = Dialog.inputChoice("Select boss to delete:", bossNames);
+        Boss selectedBoss = bossData.get(bossChoose);
 
-        if(choice > 0 && choice <= bossData.size()){
-            bossController.deleteBoss(bossData.get(choice - 1));
-            Dialog.outputInformation("Enemy deleted successfully.");
-        } else if (choice == 0) {
-            Dialog.outputInformation("Deletion cancelled.");
-        } else {
-            Dialog.outputInformation("Invalid choice. Please try again.");
-        }
+        bossController.deleteBoss(selectedBoss);
     }
 }

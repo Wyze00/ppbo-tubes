@@ -6,7 +6,7 @@ public class AdminView {
     
     public int handleMainMenu(){
 
-        String menu =  "=== Admin Menu ===\n" +
+        String menu = "Admin Menu \n" +
                       "1. Manage Weapons\n" +
                       "2. Manage Enemies\n" +
                       "3. Manage Bosses\n" +

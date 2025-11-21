@@ -5,11 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-
 import tubes.models.PlayerState;
-import tubes.models.User;
 import tubes.models.enums.Element;
-import tubes.models.enums.UserRole;
 import tubes.util.Dialog;
 
 public class PlayerStateRepo {

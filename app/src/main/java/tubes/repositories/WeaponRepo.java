@@ -7,8 +7,6 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
-
-
 import tubes.models.Weapon;
 import tubes.models.enums.Element;
 import tubes.models.enums.Rarity;
@@ -79,6 +77,29 @@ public class WeaponRepo {
     }
 
     public void update(Weapon weapon) {}
+
+    public List<Weapon> findByRarity(Rarity rarity){
+        query = "SELECT * FROM \"Weapon\" WHERE rarity = ?::\"Rarity\"";
+
+        try {
+            
+            statement = connection.prepareStatement(query);
+            statement.setObject(1, rarity.getName(), Types.OTHER);
+            resultSet = statement.executeQuery();
+            List<Weapon> weapons = new ArrayList<Weapon>();
+
+            while(resultSet.next()) {
+                weapons.add(convertResultSet());
+            }
+
+            return weapons;
+            
+        } catch (SQLException e) {
+            Dialog.outputError(e.getMessage());
+        }
+
+        return null;
+    }
 
     public Weapon convertResultSet() throws SQLException {
         return new Weapon(

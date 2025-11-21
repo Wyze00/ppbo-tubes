@@ -1,7 +1,6 @@
 package tubes.views;
 
 import java.util.List;
-
 import tubes.controllers.WeaponController;
 import tubes.models.Weapon;
 import tubes.models.enums.Element;
@@ -13,30 +12,18 @@ public class WeaponView {
 
     public void handleWeaponMenu(){
 
-        String menu =  "=== Weapon Menu ===\n" +
+        String menu = "Weapon Menu\n" +
                       "1. View All Weapons\n" +
                       "2. Add Weapon\n" +
                       "3. Delete Weapon\n" +
-
-                      "0. Back to Main Menu\n" +
-                      "Choose an option: ";
+                      "0. Back to Main Menu\n";
 
         int choice = Dialog.inputInt(menu);
 
         switch(choice){
-            case 1:
-                this.handleViewAllWeapons();
-                break;
-            case 2:
-                this.handleAddWeapon();
-                break;
-            case 3:
-                this.handleDeleteWeapon();
-                break;
-            case 0:
-                return;
-            default:
-                Dialog.outputInformation("Invalid option. Please try again.");
+            case 1 -> this.handleViewAllWeapons();
+            case 2 -> this.handleAddWeapon();
+            case 3 -> this.handleDeleteWeapon();
         }
     }
 

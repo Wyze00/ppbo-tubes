@@ -1,7 +1,6 @@
 package tubes.controllers;
 
 import java.util.List;
-
 import tubes.models.Skill;
 import tubes.repositories.SkillRepo;
 

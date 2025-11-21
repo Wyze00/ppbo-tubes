@@ -1,7 +1,6 @@
 package tubes.views;
 
 import java.util.List;
-
 import tubes.controllers.DifficultyController;
 import tubes.models.Difficulty;
 import tubes.util.Dialog;
@@ -11,29 +10,18 @@ public class DifficultyView {
 
     public void handleDifficultyMenu(){
 
-        String menu =  "=== Difficulty Menu ===\n" +
+        String menu = "Difficulty Menu\n" +
                       "1. View All Difficulties\n" +
                       "2. Add Difficulty\n" +
                       "3. Delete Difficulty\n" +
-                      "0. Back to Admin Menu\n" +
-                      "Choose an option: ";
+                      "0. Back to Admin Menu\n";
 
         int choice = Dialog.inputInt(menu);
 
         switch(choice){
-            case 1:
-                this.handleViewAllDifficulties();
-                break;
-            case 2:
-                this.handleAddDifficulty();
-                break;
-            case 3:
-                this.handleDeleteDifficulty();
-                break;
-            case 0:
-                return;
-            default:
-                Dialog.outputInformation("Invalid option. Please try again.");
+            case 1 -> this.handleViewAllDifficulties();
+            case 2 -> this.handleAddDifficulty();
+            case 3 -> this.handleDeleteDifficulty();
         }
     }
 
@@ -58,11 +46,6 @@ public class DifficultyView {
 
     public void handleDeleteDifficulty(){
         List<Difficulty> difficultiesData = difficultyController.getAllDifficulties();
-        
-        if (difficultiesData.isEmpty()) {
-            Dialog.outputInformation("No difficulties to delete.");
-            return;
-        }
 
         String[] diffNames = new String[difficultiesData.size()];
         for(int i = 0; i < difficultiesData.size(); i++){

@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
-
 import tubes.models.Potion;
 import tubes.models.enums.PotionType;
 import tubes.models.enums.Rarity;
@@ -75,6 +74,29 @@ public class PotionRepo {
         } catch (SQLException e) {
             Dialog.outputError(e.getMessage());
         }
+    }
+
+    public List<Potion> findByRarity(Rarity rarity){
+        query = "SELECT * FROM \"Potion\" WHERE rarity = ?::\"Rarity\"";
+
+        try {
+            
+            statement = connection.prepareStatement(query);
+            statement.setObject(1, rarity.getName(), Types.OTHER);
+            resultSet = statement.executeQuery();
+            List<Potion> potions = new ArrayList<Potion>();
+
+            while(resultSet.next()) {
+                potions.add(convertResultSet());
+            }
+
+            return potions;
+            
+        } catch (SQLException e) {
+            Dialog.outputError(e.getMessage());
+        }
+
+        return null;
     }
 
     public Potion convertResultSet() throws SQLException {

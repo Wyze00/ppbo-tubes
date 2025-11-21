@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
-
 import tubes.models.Buff;
 import tubes.models.enums.BuffType;
 import tubes.models.enums.Rarity;
@@ -75,6 +74,29 @@ public class BuffRepo {
         } catch (SQLException e) {
             Dialog.outputError(e.getMessage());
         }
+    }
+
+    public List<Buff> findByRarity(Rarity rarity){
+        query = "SELECT * FROM \"Buff\" WHERE rarity = ?::\"Rarity\"";
+
+        try {
+            
+            statement = connection.prepareStatement(query);
+            statement.setObject(1, rarity.getName(), Types.OTHER);
+            resultSet = statement.executeQuery();
+            List<Buff> buffs = new ArrayList<Buff>();
+
+            while(resultSet.next()) {
+                buffs.add(convertResultSet());
+            }
+
+            return buffs;
+            
+        } catch (SQLException e) {
+            Dialog.outputError(e.getMessage());
+        }
+
+        return null;
     }
 
     public Buff convertResultSet() throws SQLException {

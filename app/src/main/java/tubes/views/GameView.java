@@ -1,15 +1,10 @@
 package tubes.views;
 
 import java.awt.event.ActionListener;
-import java.util.List;
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-
 import java.awt.*;
-
 import tubes.models.Enemy;
-import tubes.models.Item;
 import tubes.models.Player;
 import tubes.models.Skill;
 import tubes.models.Weapon;
