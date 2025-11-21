@@ -18,6 +18,21 @@ public class SkillRepo {
     private ResultSet resultSet;
     private String query;
     public Skill findById(int id){
+        query = "SELECT * FROM \"Skill\" WHERE id = ?";
+
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, id);
+            resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                return convertResultSet();
+            }
+
+        } catch (SQLException e) {
+            Dialog.outputError(e.getMessage());
+        }
+
         return null;
     }
 

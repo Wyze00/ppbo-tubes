@@ -65,6 +65,10 @@ public class GameView {
         return "hand";
     }
 
+    public void handleDefeatedEnemy(){
+        Dialog.outputInformation("Enemy Defeated!");
+    }
+
     public String handleRunGame(Player player, Enemy enemy, String log, boolean disableWeapon, boolean disableSkill){
 
         final String[] result = {"hand"}; 

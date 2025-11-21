@@ -2,7 +2,7 @@ package tubes.models;
 
 import tubes.models.enums.Rarity;
 
-public class Item {
+public abstract class Item {
     private int id;
     private String name;
     private Rarity rarity;

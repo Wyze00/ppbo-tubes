@@ -133,7 +133,7 @@ public class GameController {
 
         while(true) {
             
-            List<Enemy> enemy = this.generate5EnemyAnd1Boss();
+            List<Enemy> enemy = this.generate5EnemyAnd1Boss(player.getStage());
             int currentEnemyIndex = 0;
             StringBuilder log = new StringBuilder("Game Start\n\n");
     
@@ -156,6 +156,7 @@ public class GameController {
     
                     if(!e.isAlive()){
                         log.append("You defeated enemy\n\n");
+                        this.gameView.handleDefeatedEnemy();
                         break;
                     }
     
@@ -187,8 +188,7 @@ public class GameController {
     }
 
     // Reward
-
-   public void getReward(Player player, String enemyType) {
+    public void getReward(Player player, String enemyType) {
         
         List<Item> rewardOptions = new ArrayList<>();
 
@@ -216,6 +216,7 @@ public class GameController {
                 optionNames[i] = "Tidak ambil reward";
                 continue;
             }
+
             optionNames[i] = rewardOptions.get(i).getName() + " (" + rewardOptions.get(i).getRarity().toString() + ")";
         }
 
@@ -261,17 +262,48 @@ public class GameController {
     private Item fetchRandomItem(ItemType type, Rarity rarity) {
         switch (type) {
             case POTION:
-                return new Potion(0, "Small Health Potion", Rarity.COMMON, null, 25);
+
+                List<Potion> potions = potionRepo.findByRarity(rarity);
+
+                if (!potions.isEmpty()) {
+                    Random rand = new Random();
+                    return potions.get(rand.nextInt(potions.size()));
+                }
+
+                return null;
+
             case BUFF:
-                // return buffRepo.findRandomByRarity(rarity);                
-                return new Buff(0, "Small Attack Boost", Rarity.COMMON, BuffType.ATTACK, 10); 
+
+                List<Buff> buffs = buffRepo.findByRarity(rarity);
+
+                if (!buffs.isEmpty()) {
+                    Random rand = new Random();
+                    return buffs.get(rand.nextInt(buffs.size()));
+                }
+
+                return null;
 
             case WEAPON:
-                // return weaponRepo.findRandomByRarity(rarity);
-                return new Weapon(1, "Fire Staff", Rarity.RARE, 10, 5, Element.FIRE);
+                List<Weapon> weapons = weaponRepo.findByRarity(rarity);
+
+                if (!weapons.isEmpty()) {
+                    Random rand = new Random();
+                    return weapons.get(rand.nextInt(weapons.size()));
+                }
+
+                return null;
+
             case SKILL:
-                // return skillRepo.findRandomByRarity(rarity);
-                return new Skill(6, "Shadow Ball", Rarity.COMMON, 10, 10, 3, Element.DARK);
+
+                List<Skill> skills = skillRepo.findByRarity(rarity);
+
+                if (!skills.isEmpty()) {
+                    Random rand = new Random();
+                    return skills.get(rand.nextInt(skills.size()));
+                }
+
+                return null;
+
             default:
                 return null;
         }
@@ -313,8 +345,7 @@ public class GameController {
     }
 
     // Combat
-
-    public List<Enemy> generate5EnemyAnd1Boss(){
+    public List<Enemy> generate5EnemyAnd1Boss(int stage){
 
         ArrayList<Enemy> shuffledEnemies = new ArrayList<>();
         List<Enemy> enemies = enemyRepo.findAll();
@@ -323,17 +354,24 @@ public class GameController {
         for(int i = 0; i < 5; i++){
             Random rand = new Random();
             int randomIndex = rand.nextInt(enemies.size());
-            shuffledEnemies.add(enemies.get(randomIndex));
+            shuffledEnemies.add(adjustEnemy(enemies.get(randomIndex), stage));
             enemies.remove(randomIndex);
         }
 
-        shuffledEnemies.add(bosses.get(new Random().nextInt(bosses.size())));
-
+        shuffledEnemies.add(adjustEnemy(bosses.get(new Random().nextInt(bosses.size())), stage));
+    
         Enemy b = shuffledEnemies.get(shuffledEnemies.size()-1);
         Boss boss = (Boss) b;
-        boss.setSkill(skillRepo.findDefaultByElement(boss.getElement()));
+        boss.setSkill(skillRepo.findById(boss.getSkill().getSkillId()));
 
         return shuffledEnemies;
+    }
+
+    // Tiap stage enemynya diperkuat
+    public Enemy adjustEnemy(Enemy enemy, int stage){
+
+
+        return enemy;
     }
 
     public TurnResult handlePlayerAttack(Player player, Enemy enemy, String attackType){
