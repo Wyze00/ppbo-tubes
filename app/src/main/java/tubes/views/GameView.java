@@ -54,17 +54,6 @@ public class GameView {
         Dialog.outputInformation("Game Save Success");
     }
 
-    public String handleRunGame2(Player player, Enemy enemy, String log, boolean disableWeapon, boolean disableSkill){
-
-        final String[] options = new String[]{"hand"};
-
-        Dialog.outputInformation(log);
-        Dialog.outputInformation(player.toString());
-        Dialog.outputInformation(enemy.toString());
-
-        return "hand";
-    }
-
     public void handleDefeatedEnemy(){
         Dialog.outputInformation("Enemy Defeated!");
     }
@@ -79,7 +68,7 @@ public class GameView {
         battleDialog.setLocationRelativeTo(null);
         battleDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 
-        // --- STATUS PANEL ---
+        // status panel
         JPanel statusPanel = new JPanel(new GridLayout(1, 2, 20, 0));
         statusPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
@@ -89,7 +78,7 @@ public class GameView {
         statusPanel.add(playerPanel);
         statusPanel.add(enemyPanel);
 
-        // --- LOG PANEL ---
+        // log panel
         JTextArea logArea = new JTextArea();
         logArea.setText(log);
         logArea.setEditable(false);
@@ -101,23 +90,22 @@ public class GameView {
         JScrollPane scrollPane = new JScrollPane(logArea);
         scrollPane.setBorder(BorderFactory.createTitledBorder("Battle Log"));
 
-        // --- BUTTON PANEL ---
+        // button panel
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 20));
         
         JButton btnHand = new JButton("Hand Attack");
         JButton btnWeapon = new JButton("Weapon Attack");
         JButton btnSkill = new JButton("Skill Attack");
-        JButton btnInfo = new JButton("Info / Status"); // TOMBOL BARU
+        JButton btnInfo = new JButton("Info / Status"); 
 
         // Styling
-        Dimension btnSize = new Dimension(160, 50); // Ukuran tombol
+        Dimension btnSize = new Dimension(160, 50); 
         btnHand.setPreferredSize(btnSize);
         btnWeapon.setPreferredSize(btnSize);
         btnSkill.setPreferredSize(btnSize);
         btnInfo.setPreferredSize(btnSize);
-        btnInfo.setBackground(new Color(230, 240, 255)); // Sedikit beda warna biar jelas
+        btnInfo.setBackground(new Color(230, 240, 255)); 
 
-        // Logic Disable
         if (disableWeapon) {
             btnWeapon.setEnabled(false);
             btnWeapon.setToolTipText("No Weapon / Not enough Mana");
@@ -132,7 +120,6 @@ public class GameView {
             btnSkill.setToolTipText("Mana Cost: " + player.getEquippedSkill().getManaCost());
         }
 
-        // Action Listener Utama (Untuk Attack)
         ActionListener attackListener = e -> {
             JButton source = (JButton) e.getSource();
             if (source == btnHand) result[0] = "hand";
@@ -146,7 +133,6 @@ public class GameView {
         btnWeapon.addActionListener(attackListener);
         btnSkill.addActionListener(attackListener);
 
-        // Action Listener Khusus Info (Tidak menutup dialog battle)
         btnInfo.addActionListener(e -> {
             showPlayerInfo(battleDialog, player);
         });
@@ -154,7 +140,7 @@ public class GameView {
         buttonPanel.add(btnHand);
         buttonPanel.add(btnWeapon);
         buttonPanel.add(btnSkill);
-        buttonPanel.add(btnInfo); // Add tombol info
+        buttonPanel.add(btnInfo); 
 
         battleDialog.add(statusPanel, BorderLayout.NORTH);
         battleDialog.add(scrollPane, BorderLayout.CENTER);
@@ -165,17 +151,14 @@ public class GameView {
         return result[0];
     }
 
-    /**
-     * Helper untuk menampilkan detail info player dalam popup
-     */
     private void showPlayerInfo(Component parent, Player player) {
         StringBuilder info = new StringBuilder();
-        info.append("=== PLAYER STATUS ===\n");
+        info.append("PLAYER STATUS\n");
         info.append("Base Attack: ").append(player.getAttack()).append("\n");
         info.append("Base Defense: ").append(player.getDefense()).append("\n\n");
 
-        // Info Weapon
-        info.append("--- EQUIPPED WEAPON ---\n");
+        // info Weapon
+        info.append("EQUIPPED WEAPON\n");
         Weapon w = player.getEquippedWeapon();
         if (w != null) {
             info.append("Name: ").append(w.getName()).append("\n");
@@ -188,8 +171,8 @@ public class GameView {
         }
         info.append("\n");
 
-        // Info Skill
-        info.append("--- EQUIPPED SKILL ---\n");
+        // info Skill
+        info.append("EQUIPPED SKILL\n");
         Skill s = player.getEquippedSkill();
         if (s != null) {
             info.append("Name: ").append(s.getName()).append("\n");
@@ -245,6 +228,10 @@ public class GameView {
 
     public int handleShowReward(String[] optionNames){
         return Dialog.inputChoice("Pilih Reward", optionNames);
+    }
+
+    public void handleBattleLog(String message){
+        Dialog.outputInformation(message);
     }
 
     public void showRewardApplied(String name, String message){}

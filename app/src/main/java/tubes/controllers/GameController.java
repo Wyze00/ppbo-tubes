@@ -3,7 +3,6 @@ package tubes.controllers;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
 import tubes.models.Boss;
 import tubes.models.Buff;
 import tubes.models.Difficulty;
@@ -153,6 +152,7 @@ public class GameController {
                     TurnResult playerResult = this.handlePlayerAttack(player, e, playerTurn);
                     log.append(playerResult.getMessage());
                     e.takeDamage(playerResult.damage);
+                    // this.gameView.handleBattleLog(playerResult.getMessage());
     
                     if(!e.isAlive()){
                         log.append("You defeated enemy\n\n");
@@ -163,12 +163,14 @@ public class GameController {
                     TurnResult enemyResult = this.handleEnemyAttack(player, e);
                     log.append(enemyResult.getMessage());
                     player.takeDamage(enemyResult.getDamage()); 
+                    // this.gameView.handleBattleLog(enemyResult.getMessage());
     
                     if(!player.isAlive()){
                         this.gameView.handleGameOver();
                         return;
                     }
 
+                    log.append("\n");
                     disableWeapon = false;
                     disableSkill = false;
                 }
@@ -362,14 +364,19 @@ public class GameController {
     
         Enemy b = shuffledEnemies.get(shuffledEnemies.size()-1);
         Boss boss = (Boss) b;
-        boss.setSkill(skillRepo.findById(boss.getSkill().getSkillId()));
+        boss.setSkill(skillRepo.findById(boss.getSkillId()));
 
         return shuffledEnemies;
     }
 
     // Tiap stage enemynya diperkuat
     public Enemy adjustEnemy(Enemy enemy, int stage){
+        double multiplier = 1.0 + (stage * 0.2);
 
+        enemy.setHp((int) (enemy.getHp() * multiplier));
+        enemy.setCurrentHp(enemy.getHp());
+        enemy.setAttack((int) (enemy.getAttack() * multiplier));
+        enemy.setDefense((int) (enemy.getDefense() * multiplier));
 
         return enemy;
     }
@@ -384,15 +391,18 @@ public class GameController {
 
         if(attackType.equalsIgnoreCase("hand")){
             result = handleHandAttack(player.getAttack(), player.getElement(), enemy.getDefense(), enemy.getElement());
+            result.setMessage("Player attacks with Hand! Dealt " + result.getDamage() + " damage.\n");
         } else if(attackType.equalsIgnoreCase("weapon")){
             result = handleWeaponAttack(player.getAttack(), player.getEquippedWeapon().getAttack(), player.getEquippedWeapon().getElement(), enemy.getDefense(), enemy.getElement());
+            player.setCurrentMana(player.getCurrentMana() - player.getEquippedWeapon().getMana());
+            result.setMessage("Player attacks with " + player.getEquippedWeapon().getName() + "! Dealt " + result.getDamage() + " damage.\n");
         } else {
             player.setSkillCooldown(player.getEquippedSkill().getCooldown());
             player.setCurrentMana(player.getCurrentMana() - player.getEquippedSkill().getManaCost());
             result = handleSkillAttack(player.getAttack(), player.getEquippedSkill().getAttack(), player.getEquippedSkill().getElement(), enemy.getDefense(), enemy.getElement());
+            result.setMessage("Player casts " + player.getEquippedSkill().getName() + "! Dealt " + result.getDamage() + " damage.\n");
         } 
 
-        result.setMessage("Player " + result.getMessage());
         return result;
     }
 
@@ -405,46 +415,76 @@ public class GameController {
             Boss boss = (Boss) enemy;
             boss.setSkillCooldown(boss.getSkillCooldown() - 1);
 
-            // Skill turn
             if(boss.getSkillCooldown() == 0){
                 boss.setSkillCooldown(boss.getSkill().getCooldown());;
-                // Skill
                 result = handleSkillAttack(boss.getAttack(), boss.getSkill().getAttack(), boss.getSkill().getElement(), player.getDefense(), player.getElement());
-
+                result.setMessage(boss.getName() + " uses Skill " + boss.getSkill().getName() + "! Dealt " + result.getDamage() + " damage to Player.\n");
             } else {
                 result = handleHandAttack(boss.getAttack(), boss.getElement(), player.getDefense(), player.getElement());
+                result.setMessage(boss.getName() + " attacks with Hand! Dealt " + result.getDamage() + " damage to Player.\n");
             }
-
-            result.setMessage("Boss " + result.getMessage());
 
         } else {
             result = handleHandAttack(enemy.getAttack(), enemy.getElement(), player.getDefense(), player.getElement());
-            result.setMessage("Enemy " + result.getMessage());
+            result.setMessage(enemy.getName() + " attacks! Dealt " + result.getDamage() + " damage to Player.\n");
         }
 
         return result;
     }
 
     public TurnResult handleHandAttack(int aAttack, Element aElement, int bDefense, Element bElement){
-        double multiplier = isStrongerElement(aElement, bElement) ? 1.2 : 0.8;
-        int damage = (int)((aAttack - bDefense) * multiplier);
-        return new TurnResult(damage, "attack with hand, dealt " + damage + "damage\n");
-    }
-
-    public TurnResult handleSkillAttack(int aAttack, int skillAttack, Element skillElement, int bDefense, Element bElement){
-        double multiplier = isStrongerElement(skillElement, bElement) ? 1.2 : 0.8;
-        int damage = (int)((aAttack - bDefense) * multiplier);
-        return new TurnResult(damage, "attack with skill, dealt " + damage + "damage\n");
+        double multiplier = getElementMultiplier(aElement, bElement);
+        int baseDamage = Math.max(0, aAttack - bDefense);
+        int finalDamage = (int) (baseDamage * multiplier);
+        
+        if(finalDamage <= 0) finalDamage = 1; 
+        return new TurnResult(finalDamage, "");
     }
 
     public TurnResult handleWeaponAttack(int aAttack, int weaponAttack, Element weaponElement, int bDefense, Element bElement){
-        double multiplier = isStrongerElement(weaponElement, bElement) ? 1.2 : 0.8;
-        int damage = (int)((aAttack - bDefense) * multiplier);
-        return new TurnResult(damage, "attack with weapon, dealt " + damage + "damage\n");
+        double multiplier = getElementMultiplier(weaponElement, bElement);
+        int totalAttack = aAttack + weaponAttack;
+        int baseDamage = Math.max(0, totalAttack - bDefense);
+        int finalDamage = (int) (baseDamage * multiplier);
+
+        return new TurnResult(finalDamage, "");
     }
 
-    public boolean isStrongerElement(Element aElement, Element bElement){
-        return true;
+    public TurnResult handleSkillAttack(int aAttack, int skillAttack, Element skillElement, int bDefense, Element bElement){
+        double multiplier = getElementMultiplier(skillElement, bElement);
+        int totalAttack = aAttack + skillAttack;
+        int baseDamage = Math.max(0, totalAttack - bDefense);
+        int finalDamage = (int) (baseDamage * multiplier);
+
+        return new TurnResult(finalDamage, "");
+    }
+
+    public double getElementMultiplier(Element attacker, Element defender){
+        if (attacker == null || defender == null) return 1.0;
+
+        if (isStrongerElement(attacker, defender)) {
+            return 1.2;
+        } else if (isWeakerElement(attacker, defender)) {
+            return 0.8;
+        }
+        return 1.0;
+    }
+
+    public boolean isStrongerElement(Element a, Element b){
+        if (a == Element.FIRE && b == Element.ICE) return true;
+        if (a == Element.ICE && b == Element.WIND) return true;
+        if (a == Element.WIND && b == Element.EARTH) return true;
+        if (a == Element.EARTH && b == Element.LIGHTNING) return true;
+        if (a == Element.LIGHTNING && b == Element.FIRE) return true;
+        
+        if (a == Element.LIGHT && b == Element.DARK) return true;
+        if (a == Element.DARK && b == Element.LIGHT) return true;
+
+        return false;
+    }
+
+    public boolean isWeakerElement(Element a, Element b){
+        return isStrongerElement(b, a);
     }
 
     // Util

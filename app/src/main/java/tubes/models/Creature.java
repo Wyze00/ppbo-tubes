@@ -22,8 +22,7 @@ public abstract class Creature {
     }
     
     public void takeDamage(int damage) {
-        int actualDamage = Math.max(0, damage - this.defense);
-        this.currentHp = Math.max(0, this.currentHp - actualDamage);
+        this.currentHp = this.currentHp - damage;
     }
     
     public void heal(int amount) {
