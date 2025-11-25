@@ -49,7 +49,7 @@ public class Weapon extends Item {
 
     public String toString(){
         StringBuilder str = new StringBuilder();
-        str.append("Weapon ID : " ).append(this.getWeaponId());
+        str.append("Weapon ID : " ).append(this.getWeaponId()).append("\n");
         str.append("Weapon Name: ").append(this.getName()).append("\n");
         str.append("Rarity: ").append(this.getRarity().toString()).append("\n");
         str.append("Attack: ").append(this.getAttack()).append("\n");
